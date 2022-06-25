@@ -10,6 +10,7 @@ services:
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
+      - ./api:/srv/api:rw
     healthcheck:
       interval: 10s
       timeout: 3s
@@ -22,6 +23,8 @@ services:
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
       MERCURE_JWT_SECRET: ${CADDY_MERCURE_JWT_SECRET:-!ChangeMe!}
+    ports:
+      - '9000:9000'
 
   pwa:
     build:
@@ -73,6 +76,8 @@ services:
       - db_data:/var/lib/postgresql/data:rw
       # you may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./api/docker/db/data:/var/lib/postgresql/data:rw
+    ports:
+      - '5436:5432'
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
