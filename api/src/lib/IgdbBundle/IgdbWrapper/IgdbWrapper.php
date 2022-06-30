@@ -61,12 +61,12 @@ class IgdbWrapper
         $response = $this->getPlatforms();
         $this->serializeDatas($response,PlatformMapper::class);
 
-        $companiesCount = $this->countCompanies()/500;
-        for ($i=0; $i < $companiesCount; $i++) {  
-            $offset = ($i == 0)? 0 : $i*500;
-            $response = $this->getCompanies($offset);
-            $this->serializeDatas($response, CompanyMapper::class);
-        }
+        // $companiesCount = $this->countCompanies()/500;
+        // for ($i=0; $i < $companiesCount; $i++) {  
+        //     $offset = ($i == 0)? 0 : $i*500;
+        //     $response = $this->getCompanies($offset);
+        //     $this->serializeDatas($response, CompanyMapper::class);
+        // }
 
         $gameCount = $this->countGames()/500;
         for ($i=0; $i < $gameCount; $i++) {  
@@ -114,7 +114,7 @@ class IgdbWrapper
                                     where status = null;
                                     where release_dates.platform = (48,167);
                                     where rating >= 90 & total_rating != null;
-                                    where release_dates.date > 1262300400;
+                                    where release_dates.date > 1483228800;
                                     limit '."$limit;".'
                                     offset '."$offset;",
                         ]
