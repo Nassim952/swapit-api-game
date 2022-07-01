@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
-      - ./api:/srv/api:rw
+      # - ./api:/srv/api:rw
     healthcheck:
       interval: 10s
       timeout: 3s
