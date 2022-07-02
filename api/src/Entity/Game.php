@@ -23,7 +23,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection','read:Platform:item']]
+            'normalisation_context' => ['groups' => ['read:Game:collection','read:Game:item']]
         ],
         'generate_cover' => [
             'method' => 'PATCH',
@@ -43,7 +43,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
     ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection']]
+            'normalisation_context' => ['groups' => ['read:Game:collection']]
         ]
     ]
 )]
