@@ -56,12 +56,12 @@ final class GameFilter extends AbstractContextAwareFilter
 
         if($property  == 'platforms'){
             $queryBuilder = $queryBuilder->Join("$alias.$property", 'p')->andWhere("p.id IN (:$parameterName)")
-                ->setParameter('platforms', $value);
+                ->setParameter($parameterName, $value);
         }
 
         if($property  == 'modes'){
             $queryBuilder = $queryBuilder->Join("$alias.$property", 'm')->andWhere("m.id IN (:$parameterName)")
-                ->setParameter('modes', $value);
+                ->setParameter($parameterName, $value);
         }
 
         if ($property  == 'popular') {
