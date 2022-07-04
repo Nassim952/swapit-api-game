@@ -33,7 +33,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
                 'summary' => 'Generate cover for a game',
                 'requestBody' => [
                     'content' => [
-                        'application/merge-patch+json' => [
+                        'application/json' => [
                             'schema' => []
                         ]
                     ]
