@@ -8,12 +8,12 @@ use App\Repository\GameRepository;
 use App\Controller\PatchCoverController;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
@@ -47,7 +47,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
         ]
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial','status' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'slug' => 'partial','status' => 'exact'])]
 #[ApiFilter(DateFilter::class, properties: ['first_release_date'])]
 #[ApiFilter(GameFilter::class)]
 // #[ApiFilter(OrderFilter::class, properties: ['aggregated_rating_count' => 'ASC','rating','rating_count','total_rating','total_rating_count','popularity','release_dates'])]
@@ -63,6 +63,10 @@ class Game
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['read:Game:collection'])]
     private $name;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read:Game:collection'])]
+    private $slug;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $status;
@@ -118,9 +122,6 @@ class Game
     #[ApiSubresource]
     private $platforms;
 
-
-
-
     public function __construct()
     {
         $this->genres = new ArrayCollection();
@@ -148,6 +149,18 @@ class Game
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

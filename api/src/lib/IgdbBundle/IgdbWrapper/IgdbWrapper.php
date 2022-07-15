@@ -110,7 +110,7 @@ class IgdbWrapper
                         [
                         'headers' => 
                             ['Client-ID' => $this->client, 'Authorization' => 'Bearer '.$this->access_token],
-                        'body' => 'fields name, first_release_date, status, storyline, summary, cover, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows, genres, involved_companies, game_modes, platforms;
+                        'body' => 'fields name, slug, first_release_date, status, storyline, summary, cover, version_title, age_ratings, parent_game, aggregated_rating, aggregated_rating_count, follows, genres, involved_companies, game_modes, platforms;
                                     where status = null;
                                     where release_dates.platform = (48,167);
                                     where rating >= 90 & total_rating != null;
