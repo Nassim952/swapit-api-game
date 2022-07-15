@@ -9,10 +9,11 @@ use Doctrine\ORM\QueryBuilder;
 use App\Repository\GameRepository;
 use Symfony\Component\PropertyInfo\Type;
 use App\lib\IgdbBundle\IgdbWrapper;
+use Doctrine\ORM\EntityManagerInterface;
 
 final class GameFilter extends AbstractContextAwareFilter
 {
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, IgdbWrapper $igdb, EntityManagerInterface $entityManager)
     {
         // otherwise filter is applied to order and page as well
         // if (
@@ -32,18 +33,26 @@ final class GameFilter extends AbstractContextAwareFilter
 
         if ($property  == 'name') {
 
+            $query = $entityManager->getRepository(Game::class)->createQueryBuilder('g')
+                ->where('g.name LIKE :name')
+                ->setParameter('name', '%' . $value . '%')
+                ->getQuery();
+
+            if (!$query->getResult()) {
+                $games = $igdb->searchGame($value);
+                if ($games) {
+                    is_array($games) ? $igdb->serializeDatas($games,'Game') : $igdb->serializeData($games,'Game');
+                }
+            }
+  
             $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
                 ->setParameter($parameterName,"%{$value}%");
-
-            // $igdb = new IgdbWrapper();
-
-            // $igdb->searchGame($value);
         }
 
-        if ($property  == 'ids') {
-            $queryBuilder = $queryBuilder->where("$alias.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
+        // if ($property  == 'ids') {
+        //     $queryBuilder = $queryBuilder->where("$alias.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
         if($property  == 'involved_companies'){
             $queryBuilder =  $queryBuilder->Join("$alias.$property", 'ge')->andWhere("ge.id IN (:$parameterName)")

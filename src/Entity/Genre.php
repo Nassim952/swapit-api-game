@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use App\Filter\CustomSearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
 #[ApiResource(
@@ -28,7 +28,7 @@ use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 class Genre
 {
     #[ORM\Id]
