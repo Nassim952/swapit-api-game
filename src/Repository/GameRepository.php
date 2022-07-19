@@ -22,29 +22,27 @@ class GameRepository extends ServiceEntityRepository
     // /**
     //  * @return Game[] Returns an array of Game objects
     //  */
-    /*
-    public function findByExampleField($value)
+    
+    public function findByName($value)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('g.name LIKE :name')
+            ->setParameter('name', $value)
             ->orderBy('g.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+            ->getResult();
+    } 
 
-    /*
-    public function findOneBySomeField($value): ?Game
+ 
+    public function findOneByName($value): ?Game
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('g.name = :name')
+            ->setParameter('name', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

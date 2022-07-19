@@ -47,7 +47,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
         ]
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'slug' => 'partial','status' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'slug' => 'ipartial','status' => 'exact', 'genres' => 'exact', 'modes' => 'exact', 'platforms' => 'exact',])]
 #[ApiFilter(DateFilter::class, properties: ['first_release_date'])]
 #[ApiFilter(GameFilter::class)]
 // #[ApiFilter(OrderFilter::class, properties: ['aggregated_rating_count' => 'ASC','rating','rating_count','total_rating','total_rating_count','popularity','release_dates'])]
