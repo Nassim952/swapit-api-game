@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 final class GameFilter extends AbstractContextAwareFilter
 {
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null, IgdbWrapper $igdb, EntityManagerInterface $entityManager)
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null)
     {
         // otherwise filter is applied to order and page as well
         // if (
@@ -31,23 +31,23 @@ final class GameFilter extends AbstractContextAwareFilter
         $parameterName = $queryNameGenerator->generateParameterName($property); // Generate a unique parameter name to avoid collisions with other filters
  
 
-        if ($property  == 'name') {
+        // if ($property  == 'name') {
 
-            $query = $entityManager->getRepository(Game::class)->createQueryBuilder('g')
-                ->where('g.name LIKE :name')
-                ->setParameter('name', '%' . $value . '%')
-                ->getQuery();
+        //     $query = $entityManager->getRepository(Game::class)->createQueryBuilder('g')
+        //         ->where('g.name LIKE :name')
+        //         ->setParameter('name', '%' . $value . '%')
+        //         ->getQuery();
 
-            if (!$query->getResult()) {
-                $games = $igdb->searchGame($value);
-                if ($games) {
-                    is_array($games) ? $igdb->serializeDatas($games,'Game') : $igdb->serializeData($games,'Game');
-                }
-            }
+        //     if (!$query->getResult()) {
+        //         $games = $igdb->searchGame($value);
+        //         if ($games) {
+        //             is_array($games) ? $igdb->serializeDatas($games,'Game') : $igdb->serializeData($games,'Game');
+        //         }
+        //     }
   
-            $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
-                ->setParameter($parameterName,"%{$value}%");
-        }
+        //     $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
+        //         ->setParameter($parameterName,"%{$value}%");
+        // }
 
         // if ($property  == 'ids') {
         //     $queryBuilder = $queryBuilder->where("$alias.id IN (:$parameterName)")
