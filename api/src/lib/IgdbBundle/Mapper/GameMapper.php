@@ -23,7 +23,7 @@ class GameMapper
         
         $game->setId($data['id']);
         $game->setName($data['name']);
-        $game->setSlug($data['slug']);
+        $game->setSlug(str_replace("-"," ",$data['slug']));
         $game->setFirstReleaseDate($data['first_release_date'] ?? 0);
         $game->setStatus($data['status'] ?? '');
         $game->setStoryline($data['storyline'] ?? '');

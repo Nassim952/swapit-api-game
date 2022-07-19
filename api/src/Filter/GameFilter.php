@@ -8,8 +8,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\GameRepository;
 use Symfony\Component\PropertyInfo\Type;
-use App\lib\IgdbBundle\IgdbWrapper;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 final class GameFilter extends AbstractContextAwareFilter
 {
@@ -45,33 +45,29 @@ final class GameFilter extends AbstractContextAwareFilter
         //         }
         //     }
   
+        //     $this->searchGame($value);
         //     $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
         //         ->setParameter($parameterName,"%{$value}%");
         // }
 
-        // if ($property  == 'ids') {
-        //     $queryBuilder = $queryBuilder->where("$alias.id IN (:$parameterName)")
+        // if($property  == 'involved_companies'){
+        //     $queryBuilder =  $queryBuilder->Join("$alias.$property", 'ge')->andWhere("ge.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
+        // if($property  == 'genres') {
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'ic' )->andWhere("ic.id IN (:$parameterName)")
         //         ->setParameter($parameterName, $value);
         // }
 
-        if($property  == 'involved_companies'){
-            $queryBuilder =  $queryBuilder->Join("$alias.$property", 'ge')->andWhere("ge.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
-        if($property  == 'genres') {
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'ic' )->andWhere("ic.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
+        // if($property  == 'platforms'){
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'p')->andWhere("p.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
-        if($property  == 'platforms'){
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'p')->andWhere("p.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
-
-        if($property  == 'modes'){
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'm')->andWhere("m.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
+        // if($property  == 'modes'){
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'm')->andWhere("m.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
         if ($property  == 'popular') {
             $queryBuilder->andWhere("$alias.aggregated_rating >= 70")

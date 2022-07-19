@@ -41,3 +41,10 @@ services:
         arguments:
             - client: "%env(IGDB_CLIENT)%"
             - url: "%env(IGDB_BASE_URL)%"
+    
+    App\DataProvider\GameCollectionDataProvider:
+        bind:
+            $collectionDataProvider: '@api_platform.doctrine.orm.default.collection_data_provider'
+        # tags: [ { name: 'api_platform.collection_data_provider', priority: 2 } ]
+        # # Autoconfiguration must be disabled to set a custom priority
+        # autoconfigure: false
