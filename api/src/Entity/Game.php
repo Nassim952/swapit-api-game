@@ -25,21 +25,21 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
         'get' => [
             'normalisation_context' => ['groups' => ['read:Game:collection','read:Game:item']]
         ],
-        'generate_cover' => [
-            'method' => 'PATCH',
-            'path' => '/games/{id}/generate-cover',
-            'controller' => PatchCoverController::class,
-            'openapi_context' => [
-                'summary' => 'Generate cover for a game',
-                'requestBody' => [
-                    'content' => [
-                        'application/json' => [
-                            'schema' => []
-                        ]
-                    ]
-                ]
-            ]
-        ],
+        // 'generate_cover' => [
+        //     'method' => 'PATCH',
+        //     'path' => '/games/{id}/generate-cover',
+        //     'controller' => PatchCoverController::class,
+        //     'openapi_context' => [
+        //         'summary' => 'Generate cover for a game',
+        //         'requestBody' => [
+        //             'content' => [
+        //                 'application/json' => [
+        //                     'schema' => []
+        //                 ]
+        //             ]
+        //         ]
+        //     ]
+        // ],
     ],
     collectionOperations: [
         'get' => [
