@@ -13,6 +13,10 @@ api_platform:
     defaults:
         stateless: true
         route_prefix: '/api'
-        pagination_items_per_page: 15
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 15
+    collection:
+        pagination:
+            items_per_page_parameter_name: perPage
