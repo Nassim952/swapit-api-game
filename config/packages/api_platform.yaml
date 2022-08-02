@@ -16,7 +16,7 @@ api_platform:
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         pagination_client_items_per_page: true
-        pagination_maximum_items_per_page: 15
+        pagination_maximum_items_per_page: 10
     collection:
         pagination:
             items_per_page_parameter_name: perPage
