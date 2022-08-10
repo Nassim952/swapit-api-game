@@ -18,12 +18,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Company:collection','read:Company:item']]
+            'normalization_context' => ['groups' => ['read:Company:collection','read:Company:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Company:collection']]
+            'normalization_context' => ['groups' => ['read:Company:collection']]
         ]
     ]
 )]

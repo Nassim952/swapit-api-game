@@ -42,7 +42,6 @@ final class GameCollectionDataProvider implements ContextAwareCollectionDataProv
     private function searchGame(string $data)
     {
         $games = $this->igdb->searchGame($data);
-        // dd($games);
         if ($games) {
             is_array($games) ? $this->igdb->serializeDatas($games,GameMapper::class) : $this->igdb->serializeData($games,GameMapper::class);
         }
