@@ -18,12 +18,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Genre:collection','read:Genre:item']]
+            'normalization_context' => ['groups' => ['read:Genre:collection','read:Genre:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Genre:collection']]
+            'normalization_context' => ['groups' => ['read:Genre:collection']]
         ]
     ]
 )]
@@ -34,15 +34,15 @@ class Genre
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"NONE")]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Game:collection'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Genre:item','read:Game:item','read:Game:collection'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Genre:item','read:Game:item','read:Game:collection'])]
     private $slug;
 
     #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'genres')]

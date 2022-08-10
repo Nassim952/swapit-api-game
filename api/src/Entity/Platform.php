@@ -18,12 +18,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection','read:Platform:item']]
+            'normalization_context' => ['groups' => ['read:Platform:collection','read:Platform:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection']]
+            'normalization_context' => ['groups' => ['read:Platform:collection']]
         ]
     ]
 )]
@@ -34,11 +34,12 @@ class Platform
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"NONE")]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
-
+    #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $slug;
 
@@ -46,7 +47,7 @@ class Platform
     private $url;
 
     #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'platforms')]
-    
+    #[Groups(['read:Platform:item','read:Platform:collection'])]
     private $games;
 
     public function __construct()
