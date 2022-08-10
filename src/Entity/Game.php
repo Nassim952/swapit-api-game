@@ -23,7 +23,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Game:collection','read:Game:item']]
+            'normalization_context' => ['groups' => ['read:Game:collection','read:Game:item']]
         ],
         // 'generate_cover' => [
         //     'method' => 'PATCH',
@@ -43,7 +43,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
     ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Game:collection']]
+            'normalization_context' => ['groups' => ['read:Game:collection']]
         ]
     ]
 )]
@@ -69,17 +69,19 @@ class Game
     private $slug;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read:Game:item'])]
     private $status;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['read:Game:item'])]
     private $storyline;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $summary;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $cover = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -87,7 +89,7 @@ class Game
     private $version_title;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $aggregated_rating;
 
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -103,23 +105,31 @@ class Game
     private $first_release_date;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $genres;
 
     #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'developed')]
     #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $involvedCompanies;
 
     #[ORM\ManyToMany(targetEntity: Mode::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $modes;
 
     #[ORM\ManyToMany(targetEntity: Platform::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $platforms;
 
     public function __construct()
