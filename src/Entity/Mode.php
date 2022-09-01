@@ -9,26 +9,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Filter\CustomSearchFilter;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ModeRepository::class)]
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Mode:collection','read:Mode:item']]
+            'normalization_context' => ['groups' => ['read:Mode:collection','read:Mode:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Mode:collection']]
+            'normalization_context' => ['groups' => ['read:Mode:collection']]
         ]
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 class Mode
 {
     #[ORM\Id]

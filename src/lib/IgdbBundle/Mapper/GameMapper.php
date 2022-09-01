@@ -23,6 +23,7 @@ class GameMapper
         
         $game->setId($data['id']);
         $game->setName($data['name']);
+        $game->setSlug(str_replace("-"," ",$data['slug']));
         $game->setFirstReleaseDate($data['first_release_date'] ?? 0);
         $game->setStatus($data['status'] ?? '');
         $game->setStoryline($data['storyline'] ?? '');
@@ -68,13 +69,10 @@ class GameMapper
 
         if(array_key_exists('game_modes', $data)) {
             foreach ($data['game_modes'] as $modeId) {
-
                 $mode = $em->getRepository(Mode::class)->find($modeId);
-
                 if ($mode != null) {
                     $game->addMode($mode);
                 }
-
             }
         }
 
