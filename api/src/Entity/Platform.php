@@ -9,36 +9,37 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use App\Filter\CustomSearchFilter;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: PlatformRepository::class)]
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection','read:Platform:item']]
+            'normalization_context' => ['groups' => ['read:Platform:collection','read:Platform:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Platform:collection']]
+            'normalization_context' => ['groups' => ['read:Platform:collection']]
         ]
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 class Platform
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"NONE")]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
-
+    #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $slug;
 
@@ -46,7 +47,7 @@ class Platform
     private $url;
 
     #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'platforms')]
-    
+    #[Groups(['read:Platform:item','read:Platform:collection'])]
     private $games;
 
     public function __construct()

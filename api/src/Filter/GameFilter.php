@@ -8,7 +8,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Doctrine\ORM\QueryBuilder;
 use App\Repository\GameRepository;
 use Symfony\Component\PropertyInfo\Type;
-use App\lib\IgdbBundle\IgdbWrapper;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 final class GameFilter extends AbstractContextAwareFilter
 {
@@ -30,39 +31,43 @@ final class GameFilter extends AbstractContextAwareFilter
         $parameterName = $queryNameGenerator->generateParameterName($property); // Generate a unique parameter name to avoid collisions with other filters
  
 
-        if ($property  == 'name') {
+        // if ($property  == 'name') {
 
-            $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
-                ->setParameter($parameterName,"%{$value}%");
+        //     $query = $entityManager->getRepository(Game::class)->createQueryBuilder('g')
+        //         ->where('g.name LIKE :name')
+        //         ->setParameter('name', '%' . $value . '%')
+        //         ->getQuery();
 
-            // $igdb = new IgdbWrapper();
+        //     if (!$query->getResult()) {
+        //         $games = $igdb->searchGame($value);
+        //         if ($games) {
+        //             is_array($games) ? $igdb->serializeDatas($games,'Game') : $igdb->serializeData($games,'Game');
+        //         }
+        //     }
+  
+        //     $this->searchGame($value);
+        //     $queryBuilder = $queryBuilder->andWhere("$alias.name LIKE :$parameterName")
+        //         ->setParameter($parameterName,"%{$value}%");
+        // }
 
-            // $igdb->searchGame($value);
-        }
+        // if($property  == 'involved_companies'){
+        //     $queryBuilder =  $queryBuilder->Join("$alias.$property", 'ge')->andWhere("ge.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
+        // if($property  == 'genres') {
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'ic' )->andWhere("ic.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
-        if ($property  == 'ids') {
-            $queryBuilder = $queryBuilder->where("$alias.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
+        // if($property  == 'platforms'){
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'p')->andWhere("p.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
-        if($property  == 'involved_companies'){
-            $queryBuilder =  $queryBuilder->Join("$alias.$property", 'ge')->andWhere("ge.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
-        if($property  == 'genres') {
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'ic' )->andWhere("ic.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
-
-        if($property  == 'platforms'){
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'p')->andWhere("p.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
-
-        if($property  == 'modes'){
-            $queryBuilder = $queryBuilder->Join("$alias.$property", 'm')->andWhere("m.id IN (:$parameterName)")
-                ->setParameter($parameterName, $value);
-        }
+        // if($property  == 'modes'){
+        //     $queryBuilder = $queryBuilder->Join("$alias.$property", 'm')->andWhere("m.id IN (:$parameterName)")
+        //         ->setParameter($parameterName, $value);
+        // }
 
         if ($property  == 'popular') {
             $queryBuilder->andWhere("$alias.aggregated_rating >= 70")

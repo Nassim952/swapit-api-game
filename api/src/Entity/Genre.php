@@ -11,38 +11,38 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
-use App\Filter\CustomSearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Genre:collection','read:Genre:item']]
+            'normalization_context' => ['groups' => ['read:Genre:collection','read:Genre:item']]
         ]
         ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Genre:collection']]
+            'normalization_context' => ['groups' => ['read:Genre:collection']]
         ]
     ]
 )]
 #[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
 class Genre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy:"NONE")]
     #[ORM\Column(type: 'integer')]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Game:collection'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Genre:item','read:Game:item','read:Game:collection'])]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    #[Groups(['read:Genre:collection'])]
+    #[Groups(['read:Genre:collection','read:Genre:item','read:Game:item','read:Game:collection'])]
     private $slug;
 
     #[ORM\ManyToMany(targetEntity: Game::class, inversedBy: 'genres')]

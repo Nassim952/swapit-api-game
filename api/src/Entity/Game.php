@@ -8,12 +8,12 @@ use App\Repository\GameRepository;
 use App\Controller\PatchCoverController;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
@@ -23,31 +23,31 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     itemOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Game:collection','read:Game:item']]
+            'normalization_context' => ['groups' => ['read:Game:collection','read:Game:item']]
         ],
-        'generate_cover' => [
-            'method' => 'PATCH',
-            'path' => '/games/{id}/generate-cover',
-            'controller' => PatchCoverController::class,
-            'openapi_context' => [
-                'summary' => 'Generate cover for a game',
-                'requestBody' => [
-                    'content' => [
-                        'application/json' => [
-                            'schema' => []
-                        ]
-                    ]
-                ]
-            ]
-        ],
+        // 'generate_cover' => [
+        //     'method' => 'PATCH',
+        //     'path' => '/games/{id}/generate-cover',
+        //     'controller' => PatchCoverController::class,
+        //     'openapi_context' => [
+        //         'summary' => 'Generate cover for a game',
+        //         'requestBody' => [
+        //             'content' => [
+        //                 'application/json' => [
+        //                     'schema' => []
+        //                 ]
+        //             ]
+        //         ]
+        //     ]
+        // ],
     ],
     collectionOperations: [
         'get' => [
-            'normalisation_context' => ['groups' => ['read:Game:collection']]
+            'normalization_context' => ['groups' => ['read:Game:collection']]
         ]
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial','status' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'slug' => 'ipartial','status' => 'exact', 'genres' => 'exact', 'modes' => 'exact', 'platforms' => 'exact',])]
 #[ApiFilter(DateFilter::class, properties: ['first_release_date'])]
 #[ApiFilter(GameFilter::class)]
 // #[ApiFilter(OrderFilter::class, properties: ['aggregated_rating_count' => 'ASC','rating','rating_count','total_rating','total_rating_count','popularity','release_dates'])]
@@ -65,17 +65,23 @@ class Game
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read:Game:collection'])]
+    private $slug;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(['read:Game:item'])]
     private $status;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups(['read:Game:item'])]
     private $storyline;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $summary;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $cover = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -83,7 +89,7 @@ class Game
     private $version_title;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(['read:Game:item'])]
+    #[Groups(['read:Game:collection'])]
     private $aggregated_rating;
 
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -99,27 +105,32 @@ class Game
     private $first_release_date;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $genres;
 
     #[ORM\ManyToMany(targetEntity: Company::class, mappedBy: 'developed')]
     #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $involvedCompanies;
 
     #[ORM\ManyToMany(targetEntity: Mode::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $modes;
 
     #[ORM\ManyToMany(targetEntity: Platform::class, mappedBy: 'games')]
-    #[Groups(['read:Game:item'])]
-    #[ApiSubresource]
+    #[Groups(['read:Game:item', 'read:Game:collection'])]
+    #[ApiSubresource(
+        maxDepth: 1,
+    )]
     private $platforms;
-
-
-
 
     public function __construct()
     {
@@ -148,6 +159,18 @@ class Game
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
