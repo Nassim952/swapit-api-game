@@ -37,8 +37,10 @@ class Platform
     #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     private $id;
 
+    #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     #[ORM\Column(type: 'string', length: 255)]
     private $name;
+
     #[Groups(['read:Game:item','read:Game:collection','read:Platform:item','read:Platform:collection'])]
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $slug;
